@@ -4,11 +4,20 @@ Ethers.js + Maker's Multicall
 
 Batch your calls together using Etherplex.
 
-## Example
+# Setup
+
+```bash
+$ yarn add @pooltogether/etherplex
+```
+
+# Usage
 
 ```javascript
 import { ethers } from 'ethers'
 import { batch, contract } from '@pooltogether/etherplex'
+
+// Assuming PoolAbi is an ABI
+// Assume the DAI_ADDRESS and USDC_ADDRESS constants are Ethereum addresses
 
 let daiContract = contract('DaiPool', PoolAbi, DAI_ADDRESS)
 let usdcContract = contract('UsdcPool', PoolAbi, USDC_ADDRESS)
