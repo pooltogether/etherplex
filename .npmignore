@@ -1,0 +1,10 @@
+.circleci
+coverage
+docs
+node_modules
+scripts
+.gitignore
+jest.config.js
+rollup.config.js
+typedoc.json
+yarn-error.log

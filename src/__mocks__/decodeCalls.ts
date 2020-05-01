@@ -1,0 +1,1 @@
+export const decodeCalls = jest.fn(() => 'decoded')

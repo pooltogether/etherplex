@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "lib"
+  },
+  "external": [
+    "ethers"
+  ],
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/__tests__/**.ts", "src/__mocks__/**.ts"]
+}

@@ -1,0 +1,1 @@
+export const encodeCalls = jest.fn(() => 'encoded')

@@ -1,0 +1,50 @@
+{
+  "name": "@pooltogether/etherplex",
+  "version": "0.1.0",
+  "description": "Multicall with Ethers.js",
+  "main": "index.js",
+  "browser": "index.js",
+  "types": "src/index.ts",
+  "repository": "https://github.com/pooltogether/etherplex",
+  "author": "Brendan Asselstine <brendan@pooltogether.us>",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest -w 1",
+    "dist": "rollup -c rollup.config.js",
+    "dist-clean": "rm -rf _virtual abis index.js typeDefs.js Call.js MulticallContract.js MulticallExecutor.js batch.js contract.js decodeCalls.js encodeCalls.js",
+    "watch": "rollup -w -c rollup.config.js",
+    "coverage": "jest --coverage --coverageReporters html",
+    "test-watch": "jest --watchAll",
+    "docs": "typedoc src",
+    "prepack": "yarn dist",
+    "postpublish": "PACKAGE_VERSION=$(cat package.json | grep \\\"version\\\" | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION && git push --tags"
+  },
+  "directories": {
+    "lib": "dist",
+    "src": "src"
+  },
+  "dependencies": {
+    "debug": "^4.1.1",
+    "lodash": "^4.17.15",
+    "lodash.merge": "^4.6.2",
+    "zen-observable-ts": "^0.8.20"
+  },
+  "peerDependencies": {
+    "ethers": "^4.0.39"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.23",
+    "ethers": "^4.0.39",
+    "jest": "^24.9.0",
+    "jest-leak-detector": "^25.1.0",
+    "node-fetch": "^2.6.0",
+    "promise.allsettled": "^1.0.2",
+    "rollup": "^1.27.4",
+    "rollup-plugin-typescript": "^1.0.1",
+    "ts-jest": "^24.2.0",
+    "tslib": "^1.10.0",
+    "typedoc": "^0.15.3",
+    "typescript": "^3.7.2",
+    "weak": "^1.0.1"
+  }
+}
