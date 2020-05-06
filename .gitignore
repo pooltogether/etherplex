@@ -17,4 +17,11 @@ _virtual
 /types
 typeDefs.js
 /multicall
-
+index.js
+Call.js
+MulticallContract.js
+MulticallExecutor.js
+batch.js
+contract.js
+decodeCalls.js
+encodeCalls.js
