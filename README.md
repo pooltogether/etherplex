@@ -1,8 +1,13 @@
 # Etherplex
 
-Ethers.js + Maker's Multicall
+[Ethers.js](https://github.com/ethers-io/ethers.js) + [Multicall](https://github.com/makerdao/multicall)
 
-Batch your calls together using Etherplex.
+Batch multiple Ethereum JSON RPC calls into a single RPC call.
+
+Features:
+
+- Uses the Multicall contract when available
+- Falls back to individual RPC requests when not available
 
 # Setup
 
