@@ -9,5 +9,6 @@ export const ethers = {
     hexlify: ethersOriginal.utils.hexlify,
     getDefaultProvider: () => jest.fn()
   },
-  Contract: jest.fn()
+  Contract: ethersOriginal.Contract,
+  providers: ethersOriginal.providers
 }

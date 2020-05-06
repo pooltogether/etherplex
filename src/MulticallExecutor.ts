@@ -24,7 +24,7 @@ export class MulticallExecutor {
     let calls: Array<Call> = []
 
     contexts.forEach((caller) => {
-      result[caller.contract.name] = {}
+      result[caller.contract.__name] = {}
       calls = calls.concat(caller.flush())
     })
 
@@ -38,8 +38,8 @@ export class MulticallExecutor {
       let call = calls[i]
       let decoded = call.fd.decode(returnValues[i])
       
-      result[call.caller.name][call.fd.name] = decoded
-      result[call.caller.name][call.fd.signature] = decoded
+      result[call.caller.__name][call.fd.name] = decoded
+      result[call.caller.__name][call.fd.signature] = decoded
     }
 
     return result

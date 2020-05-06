@@ -63,8 +63,8 @@ describe('MulticallExecutor', () => {
       ))
 
       const result = await executor.executeCalls([
-        { caller: contract, fd: contract.interface.functions.balanceOf, to: ADDRESS, data: '0x70a08231000000000000000000000000b197f346ec436e1fa89ed8b4ce58696364ab232c' },
-        { caller: contract, fd: contract.interface.functions.totalSupply, to: ADDRESS, data: '0x18160ddd' }
+        { caller: contract, fd: contract.__interface.functions.balanceOf, to: ADDRESS, data: '0x70a08231000000000000000000000000b197f346ec436e1fa89ed8b4ce58696364ab232c' },
+        { caller: contract, fd: contract.__interface.functions.totalSupply, to: ADDRESS, data: '0x18160ddd' }
       ])
 
       expect(result).toEqual([

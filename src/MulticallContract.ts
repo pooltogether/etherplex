@@ -40,20 +40,20 @@ export class Context {
 }
 
 export class MulticallContract {
-  public interface: Interface
-  public functionContext: Function
+  public __interface: Interface
+  public __functionContext: Function
 
   constructor (
-    public readonly name: string,
+    public readonly __name: string,
     abi: Array<any>,
-    private readonly address: string
+    private readonly __address: string
   ) {
-    this.interface = new ethers.utils.Interface(abi)
+    this.__interface = new ethers.utils.Interface(abi)
 
-    this.functionContext = class FunctionContext extends Context {}
+    this.__functionContext = class FunctionContext extends Context {}
 
-    Object.keys(this.interface.functions).forEach(functionName => {
-      let fd = this.interface.functions[functionName]
+    Object.keys(this.__interface.functions).forEach(functionName => {
+      let fd = this.__interface.functions[functionName]
       if (fd.type === 'call') {
         this.addFunction(fd)
         this.addPrototypeFunction(fd)
@@ -66,7 +66,7 @@ export class MulticallContract {
     let callback = (...params) => {
       // create a new context and return it
       // @ts-ignore
-      let context = new this.functionContext(that)
+      let context = new this.__functionContext(that)
       return context[fd.name](...params)
     }
 
@@ -77,11 +77,11 @@ export class MulticallContract {
   addPrototypeFunction(fd) {
     let callback = function (...params) {
       let data = fd.encode(params)
-      this.call(this.contract.address, fd, data)
+      this.call(this.contract.__address, fd, data)
       return this
     }
 
-    this.functionContext.prototype[fd.name] = callback
-    this.functionContext.prototype[fd.signature] = callback
+    this.__functionContext.prototype[fd.name] = callback
+    this.__functionContext.prototype[fd.signature] = callback
   }
 }

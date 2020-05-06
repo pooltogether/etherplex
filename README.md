@@ -20,7 +20,11 @@ import { batch, contract } from '@pooltogether/etherplex'
 // Assume the DAI_ADDRESS and USDC_ADDRESS constants are Ethereum addresses
 
 let daiContract = contract('DaiPool', PoolAbi, DAI_ADDRESS)
-let usdcContract = contract('UsdcPool', PoolAbi, USDC_ADDRESS)
+
+// Alternatively, you can just pass in an ethers.Contract instance
+let ethersContract = new ethers.Contract(USDC_ADDRESS, PoolAbi, provider)
+
+let usdcContract = contract('UsdcPool', ethersContract)
 
 batch(
   ethers.getDefaultProvider(),
