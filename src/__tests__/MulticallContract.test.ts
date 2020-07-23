@@ -1,5 +1,6 @@
 import { MulticallContract } from '../MulticallContract'
 import ERC20Abi from '../__mocks__/ERC20Abi'
+import PrizeStrategyAbi from '../__mocks__/PrizeStrategyAbi'
 
 const ADDRESS = '0xb197f346ec436e1fa89ed8b4ce58696364ab232c'
 
@@ -14,6 +15,12 @@ describe('MulticallContract', () => {
     expect(contract.totalSupply).toBeDefined()
   })
 
+  it('should support non-constant functions as well', () => {
+    const prizeStrategyContract = new MulticallContract('PrizeStrategy', PrizeStrategyAbi, '0x1234')
+    // @ts-ignore    
+    expect(prizeStrategyContract.estimatePrize).toBeDefined()
+  })
+  
   it('should encode for the callbacks', () => {
     let contract = new MulticallContract('ERC20', ERC20Abi, '0x1234')
 

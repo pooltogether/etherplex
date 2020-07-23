@@ -12,12 +12,12 @@ export class Context {
   call (to: string, fd: FunctionDescription, data: Arrayish) {
     let resolveCb: Function
     let rejectCb: Function
-    
+
     const promise = new Promise((resolve, reject) => {
       resolveCb = resolve
       rejectCb = reject
     })
-    
+
     const call = new Call(
       this.contract,
       fd,
@@ -54,7 +54,8 @@ export class MulticallContract {
 
     Object.keys(this.__interface.functions).forEach(functionName => {
       let fd = this.__interface.functions[functionName]
-      if (fd.type === 'call') {
+
+      if (/call|transaction/i.test(fd.type)) {
         this.addFunction(fd)
         this.addPrototypeFunction(fd)
       }
