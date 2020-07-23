@@ -54,10 +54,9 @@ export class MulticallContract {
 
     Object.keys(this.__interface.functions).forEach(functionName => {
       let fd = this.__interface.functions[functionName]
-      if (fd.type === 'call') {
-        this.addFunction(fd)
-        this.addPrototypeFunction(fd)
-      }
+
+      this.addFunction(fd)
+      this.addPrototypeFunction(fd)
     })
   }
 
@@ -76,7 +75,12 @@ export class MulticallContract {
 
   addPrototypeFunction(fd) {
     let callback = function (...params) {
-      let data = fd.encode(params)
+      let data = []
+      if (fd.encode) {
+        console.log(fd)
+        console.log(fd.name)
+        data = fd.encode(params)
+      }
       this.call(this.contract.__address, fd, data)
       return this
     }
