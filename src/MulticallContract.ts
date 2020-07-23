@@ -12,12 +12,12 @@ export class Context {
   call (to: string, fd: FunctionDescription, data: Arrayish) {
     let resolveCb: Function
     let rejectCb: Function
-    
+
     const promise = new Promise((resolve, reject) => {
       resolveCb = resolve
       rejectCb = reject
     })
-    
+
     const call = new Call(
       this.contract,
       fd,
@@ -55,8 +55,10 @@ export class MulticallContract {
     Object.keys(this.__interface.functions).forEach(functionName => {
       let fd = this.__interface.functions[functionName]
 
-      this.addFunction(fd)
-      this.addPrototypeFunction(fd)
+      if (/call|transaction/i.test(fd.type)) {
+        this.addFunction(fd)
+        this.addPrototypeFunction(fd)
+      }
     })
   }
 
@@ -75,12 +77,7 @@ export class MulticallContract {
 
   addPrototypeFunction(fd) {
     let callback = function (...params) {
-      let data = []
-      if (fd.encode) {
-        console.log(fd)
-        console.log(fd.name)
-        data = fd.encode(params)
-      }
+      let data = fd.encode(params)
       this.call(this.contract.__address, fd, data)
       return this
     }
