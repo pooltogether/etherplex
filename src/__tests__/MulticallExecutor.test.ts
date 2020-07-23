@@ -44,10 +44,10 @@ describe('MulticallExecutor', () => {
 
       expect(result).toEqual({
         ERC20: {
-          balanceOf: [ethers.utils.bigNumberify('1234')],
-          'balanceOf(address)': [ethers.utils.bigNumberify('1234')],
-          totalSupply: [ethers.utils.bigNumberify('100')],
-          'totalSupply()': [ethers.utils.bigNumberify('100')]
+          balanceOf: [ethers.BigNumber.from('1234')],
+          'balanceOf(address)': [ethers.BigNumber.from('1234')],
+          totalSupply: [ethers.BigNumber.from('100')],
+          'totalSupply()': [ethers.BigNumber.from('100')]
         }
       })
     })
@@ -57,7 +57,7 @@ describe('MulticallExecutor', () => {
     it('should use multicall when available', async () => {
       let contract = new MulticallContract('ERC20', ERC20Abi, ADDRESS)
 
-      // ethers.utils.defaultAbiCoder.encode(['uint256', 'bytes[]'], [1234, [ethers.utils.bigNumberify('1234'), ethers.utils.bigNumberify('4321')]])
+      // ethers.utils.defaultAbiCoder.encode(['uint256', 'bytes[]'], [1234, [ethers.BigNumber.from('1234'), ethers.BigNumber.from('4321')]])
       executor.executeMulticallData = jest.fn(() => (
         '0x00000000000000000000000000000000000000000000000000000000000004d20000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000204d2000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000210e1000000000000000000000000000000000000000000000000000000000000'
       ))
@@ -68,9 +68,9 @@ describe('MulticallExecutor', () => {
       ])
 
       expect(result).toEqual([
-        ethers.utils.bigNumberify('1234'), [
-          ethers.utils.bigNumberify('1234').toHexString(),
-          ethers.utils.bigNumberify('4321').toHexString()
+        ethers.BigNumber.from('1234'), [
+          ethers.BigNumber.from('1234').toHexString(),
+          ethers.BigNumber.from('4321').toHexString()
         ]
       ])
     })

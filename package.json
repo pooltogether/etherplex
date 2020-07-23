@@ -29,12 +29,9 @@
     "lodash.merge": "^4.6.2",
     "zen-observable-ts": "^0.8.20"
   },
-  "peerDependencies": {
-    "ethers": "^4.0.39"
-  },
   "devDependencies": {
     "@types/jest": "^24.0.23",
-    "ethers": "^4.0.39",
+    "ethers": "^5.0.2",
     "jest": "^24.9.0",
     "jest-leak-detector": "^25.1.0",
     "node-fetch": "^2.6.0",

@@ -3,7 +3,7 @@ const ethersOriginal = jest.requireActual('ethers')
 export const ethers = {
   utils: {
     Interface: ethersOriginal.utils.Interface,
-    bigNumberify: ethersOriginal.utils.bigNumberify,
+    BigNumber: ethersOriginal.BigNumber,
     defaultAbiCoder: ethersOriginal.utils.defaultAbiCoder,
     getAddress: ethersOriginal.utils.getAddress,
     hexlify: ethersOriginal.utils.hexlify,
