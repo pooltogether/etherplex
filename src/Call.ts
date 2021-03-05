@@ -1,12 +1,13 @@
-import { Arrayish, FunctionDescription } from 'ethers/utils'
+import { BytesLike } from 'ethers'
+import { FunctionFragment } from 'ethers/lib/utils';
 import { MulticallContract } from './MulticallContract';
 
 export class Call {
   constructor(
     public readonly caller: MulticallContract,
-    public readonly fd: FunctionDescription,
+    public readonly fd: FunctionFragment,
     public readonly to: string,
-    public readonly data: Arrayish,
+    public readonly data: BytesLike,
     public readonly resolve: Function,
     public readonly reject: Function
   ) {}

@@ -1,7 +1,7 @@
 import { Call } from './Call'
 import { encodeCalls } from './encodeCalls'
 import { decodeCalls } from './decodeCalls'
-import { BaseProvider } from 'ethers/providers'
+import { BaseProvider } from "@ethersproject/providers";
 import { Context } from './MulticallContract'
 
 const debug = require('debug')('etherplex:MulticallExecutor')
@@ -36,10 +36,10 @@ export class MulticallExecutor {
 
     for (let i = 0; i < returnValues.length; i++) {
       let call = calls[i]
-      let decoded = call.fd.decode(returnValues[i])
+      let decoded = call.caller.__interface.decodeFunctionResult(call.fd, returnValues[i])
       
       result[call.caller.__name][call.fd.name] = decoded
-      result[call.caller.__name][call.fd.signature] = decoded
+      result[call.caller.__name][call.fd.format()] = decoded
     }
 
     return result
