@@ -1,5 +1,6 @@
 import { ethers } from 'ethers'
-import { FunctionDescription, Arrayish, Interface } from 'ethers/utils'
+import { BytesLike } from 'ethers'
+import { FunctionFragment, Interface } from 'ethers/lib/utils'
 import { Call } from './Call'
 
 export class Context {
@@ -9,7 +10,7 @@ export class Context {
     public contract: MulticallContract
   ) {}
 
-  call (to: string, fd: FunctionDescription, data: Arrayish) {
+  call (to: string, fd: FunctionFragment, data: BytesLike) {
     let resolveCb: Function
     let rejectCb: Function
 
@@ -55,14 +56,14 @@ export class MulticallContract {
     Object.keys(this.__interface.functions).forEach(functionName => {
       let fd = this.__interface.functions[functionName]
 
-      if (/call|transaction/i.test(fd.type)) {
+      if (/function/i.test(fd.type)) {
         this.addFunction(fd)
         this.addPrototypeFunction(fd)
       }
     })
   }
 
-  addFunction (fd: FunctionDescription) {
+  addFunction (fd: FunctionFragment) {
     let that = this
     let callback = (...params) => {
       // create a new context and return it
@@ -72,17 +73,18 @@ export class MulticallContract {
     }
 
     this[fd.name] = callback
-    this[fd.signature] = callback
+    this[fd.format()] = callback
   }
 
-  addPrototypeFunction(fd) {
+  addPrototypeFunction(fd: FunctionFragment) {
+    let that = this
     let callback = function (...params) {
-      let data = fd.encode(params)
+      let data = that.__interface.encodeFunctionData(fd, params)
       this.call(this.contract.__address, fd, data)
       return this
     }
 
     this.__functionContext.prototype[fd.name] = callback
-    this.__functionContext.prototype[fd.signature] = callback
+    this.__functionContext.prototype[fd.format()] = callback
   }
 }

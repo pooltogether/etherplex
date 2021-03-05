@@ -1,4 +1,4 @@
-import { BaseProvider } from "ethers/providers";
+import { BaseProvider } from "@ethersproject/providers";
 import { MulticallExecutor } from "./MulticallExecutor";
 import { Context } from "./MulticallContract";
 

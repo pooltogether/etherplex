@@ -10,7 +10,6 @@ describe('encodeCalls', () => {
       resolve: jest.fn(),
       reject: jest.fn()
     }
-
     expect(encodeCalls([call])).toBeDefined()
   })
 })

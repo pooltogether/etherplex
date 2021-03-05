@@ -1,5 +1,4 @@
 import { contract } from '../contract'
-import { ethers } from 'ethers'
 import ERC20Abi from '../__mocks__/ERC20Abi'
 
 describe('contract', () => {
@@ -11,15 +10,19 @@ describe('contract', () => {
     // @ts-ignore
     let mc = contract('TestContract', c)
 
-    expect(mc.__interface.abi).toEqual(ERC20Abi)
+    // Note: Ethers formats the ABI slightly differently
+    // Ex. outputs: [{ name: "", type: "bool" }] will result in outputs: [{ type: "bool" }]
+    expect(JSON.parse(mc.__interface.format('json')).length).toEqual(ERC20Abi.length)
     expect(mc.__address).toEqual(address)
   })
 
   it('should take explicit args', () => {
     // @ts-ignore
     let mc = contract('TestContract', ERC20Abi, address)
-
-    expect(mc.__interface.abi).toEqual(ERC20Abi)
+    
+    // Note: Ethers formats the ABI slightly differently
+    // Ex. outputs: [{ name: "", type: "bool" }] will result in outputs: [{ type: "bool" }]
+    expect(JSON.parse(mc.__interface.format('json')).length).toEqual(ERC20Abi.length)
     expect(mc.__address).toEqual(address)
   })
 })
