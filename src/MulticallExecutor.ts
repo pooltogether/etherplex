@@ -10,6 +10,9 @@ export const MULTICALL_ADDRESS_MAINNET = "0xeefba1e63905ef1d7acba5a8513c70307c1c
 export const MULTICALL_ADDRESS_KOVAN = "0x2cc8688c5f75e365aaeeb4ea8d6a480405a48d2a"
 export const MULTICALL_ADDRESS_RINKEBY = "0x42ad527de7d4e9d9d011ac45b31d8551f8fe9821"
 export const MULTICALL_ADDRESS_GOERLI = "0x77dca2c955b15e9de4dbbcf1246b4b85b651e50e"
+export const MULTICALL_ADDRESS_MATIC = "0x95028E5B8a734bb7E2071F96De89BABe75be9C8E"
+export const MULTICALL_ADDRESS_XDAI = "0xb5b692a88bdfc81ca69dcb1d924f59f0413a602a"
+export const MULTICALL_ADDRESS_BSC = "0xbEDe4875F56aaAB7a6aBbF9E423e0ba9E0a90b2A"
 export const AGGREGATE_SELECTOR = '0x252dba42';
 
 export class MulticallExecutor {
@@ -97,12 +100,18 @@ export class MulticallExecutor {
     switch (chainId) {
       case 1:
         return MULTICALL_ADDRESS_MAINNET
-      case 42:
-        return MULTICALL_ADDRESS_KOVAN
       case 4:
         return MULTICALL_ADDRESS_RINKEBY
       case 5:
         return MULTICALL_ADDRESS_GOERLI
+      case 42:
+        return MULTICALL_ADDRESS_KOVAN
+      case 56:
+        return MULTICALL_ADDRESS_BSC
+      case 100:
+        return MULTICALL_ADDRESS_XDAI
+      case 137:
+        return MULTICALL_ADDRESS_MATIC
       default:
         return null
     }
