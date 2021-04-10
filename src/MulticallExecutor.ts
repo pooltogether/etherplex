@@ -1,7 +1,9 @@
-import { Call } from "./Call";
-import { decodeCalls } from "./decodeCalls";
 import { BaseProvider } from "@ethersproject/providers";
+import { Call } from "./Call";
 import { Context } from "./MulticallContract";
+import { aggregateCalls } from "./aggregateCalls";
+import { decodeCalls } from "./decodeCalls";
+import { encodeCalls } from "../encodeCalls";
 import {
   networkSupportsMulticall,
   multicallAddressOrThrow,
@@ -15,19 +17,23 @@ export class MulticallExecutor {
   constructor(private readonly provider: BaseProvider) {}
 
   async executeCallers(...contexts: Context[]) {
-    let result = {};
+    const [result, calls] = aggregateCalls(...contexts);
+    debug(`Got result: ${result}`);
 
-    let calls: Array<Call> = [];
+    const data = encodeCalls(calls);
 
-    contexts.forEach((caller) => {
-      result[caller.contract.__name] = {};
-      calls = calls.concat(caller.flush());
-    });
+    // let [blockNumber, returnValues] = await this.executeCalls(calls, data);
 
-    debug(`Found ${calls.length} calls...`);
+    const network = await this.provider.getNetwork();
+    let returnValues;
+    if (await networkSupportsMulticall(network.chainId)) {
+      returnValues = await this.executeCallsWithMulticall(data);
+      returnValues = decodeCalls(returnValues);
+    } else {
+      returnValues = await this.executeRegularCalls(calls);
+    }
 
-    const [blockNumber, returnValues] = await this.executeCalls(calls);
-
+    // returnValues = decodeCalls(returnValues);
     debug(`Got return values: ${returnValues}`);
 
     for (let i = 0; i < returnValues.length; i++) {
@@ -44,25 +50,19 @@ export class MulticallExecutor {
     return result;
   }
 
-  async executeCalls(calls: Call[]) {
-    const network = await this.provider.getNetwork();
-    if (await networkSupportsMulticall(network.chainId)) {
-      debug(`Multicall is supported`);
-      const data = encodeCalls(calls);
-      debug(`Encoded data: ${data}`);
-      debug(calls);
-      const result = await this.executeMulticallData(data);
-      return decodeCalls(result);
-    } else {
-      const values = await Promise.all(
-        calls.map(
-          async (call) =>
-            await this.provider.call({ to: call.to, data: call.data })
-        )
-      );
-      return [null, values];
-    }
-  }
+  executeCallsWithMulticall = async (data) => {
+    return await this.executeMulticallData(data);
+  };
+
+  executeRegularCalls = async (calls: Call[]) => {
+    const values = await Promise.all(
+      calls.map(
+        async (call) =>
+          await this.provider.call({ to: call.to, data: call.data })
+      )
+    );
+    return values;
+  };
 
   async executeMulticallData(data: string) {
     const network = await this.provider.getNetwork();
