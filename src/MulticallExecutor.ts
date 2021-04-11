@@ -5,14 +5,10 @@ import { aggregateCalls } from "./aggregateCalls";
 import { decodeCalls } from "./decodeCalls";
 import { decodeFunctionResults } from "./decodeFunctionResults";
 import { encodeCalls } from "./encodeCalls";
-import {
-  networkSupportsMulticall,
-  multicallAddressOrThrow,
-} from "./multicallAddresses";
+import { prepareTransaction } from "./prepareTransaction";
+import { networkSupportsMulticall } from "./multicallAddresses";
 
 const debug = require("debug")("etherplex:MulticallExecutor");
-
-export const AGGREGATE_SELECTOR = "0x252dba42";
 
 export class MulticallExecutor {
   constructor(private readonly provider: BaseProvider) {}
@@ -53,15 +49,7 @@ export class MulticallExecutor {
 
   async executeMulticallData(data: string) {
     const network = await this.provider.getNetwork();
-    const address = await multicallAddressOrThrow(network.chainId);
-
-    const callData = AGGREGATE_SELECTOR + data.substr(2);
-
-    const tx = {
-      to: address,
-      data: callData,
-    };
-
+    const tx = await prepareTransaction(network.chainId, data);
     const result = await this.provider.call(tx);
 
     return result;

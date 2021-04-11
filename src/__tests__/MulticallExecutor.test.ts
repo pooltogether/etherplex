@@ -1,5 +1,6 @@
 import { BigNumber } from "@ethersProject/bignumber";
-import { MulticallExecutor, AGGREGATE_SELECTOR } from "../MulticallExecutor";
+import { MulticallExecutor } from "../MulticallExecutor";
+import { AGGREGATE_SELECTOR } from "../prepareTransaction";
 import { MulticallContract } from "../MulticallContract";
 import { MULTICALL_ADDRESSES } from "../multicallAddresses";
 import ERC20Abi from "../__mocks__/ERC20Abi";
