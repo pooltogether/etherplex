@@ -3,7 +3,7 @@ import { Call } from "./Call";
 import { Context } from "./MulticallContract";
 import { aggregateCalls } from "./aggregateCalls";
 import { decodeCalls } from "./decodeCalls";
-import { encodeCalls } from "../encodeCalls";
+import { encodeCalls } from "./encodeCalls";
 import {
   networkSupportsMulticall,
   multicallAddressOrThrow,
@@ -18,27 +18,15 @@ export class MulticallExecutor {
 
   async executeCallers(...contexts: Context[]) {
     const [result, calls] = aggregateCalls(...contexts);
-    debug(`Got result: ${result}`);
 
-    const data = encodeCalls(calls);
+    const [blockNumber, returnValues] = await this.executeCalls(calls);
 
-    // let [blockNumber, returnValues] = await this.executeCalls(calls, data);
+    const decoded = this.decodeFunctionResults(result, calls, returnValues);
 
-    const network = await this.provider.getNetwork();
-    let returnValues;
-    if (await networkSupportsMulticall(network.chainId)) {
-      console.log(data);
-      // returnValues = await this.executeCallsWithMulticall(data);
-      returnValues = await this.executeMulticallData(data);
-      console.log(returnValues);
-      returnValues = decodeCalls(returnValues);
-    } else {
-      returnValues = await this.executeRegularCalls(calls);
-    }
+    return decoded;
+  }
 
-    // returnValues = decodeCalls(returnValues);
-    debug(`Got return values: ${returnValues}`);
-
+  decodeFunctionResults(result, calls, returnValues) {
     for (let i = 0; i < returnValues.length; i++) {
       let call = calls[i];
       let decoded = call.caller.__interface.decodeFunctionResult(
@@ -49,23 +37,32 @@ export class MulticallExecutor {
       result[call.caller.__name][call.fd.name] = decoded;
       result[call.caller.__name][call.fd.format()] = decoded;
     }
-
     return result;
   }
 
-  // executeCallsWithMulticall = async (data) => {
-  //   return await this.executeMulticallData(data);
-  // };
+  async executeCalls(calls: Call[]) {
+    if (await this.multicallSupported()) {
+      debug(`Multicall is supported`);
+      const data = encodeCalls(calls);
+      debug(`Encoded data: ${data}`);
+      debug(calls);
+      const result = await this.executeMulticallData(data);
+      return decodeCalls(result);
+    } else {
+      const values = await Promise.all(
+        calls.map(
+          async (call) =>
+            await this.provider.call({ to: call.to, data: call.data })
+        )
+      );
+      return [null, values];
+    }
+  }
 
-  executeRegularCalls = async (calls: Call[]) => {
-    const values = await Promise.all(
-      calls.map(
-        async (call) =>
-          await this.provider.call({ to: call.to, data: call.data })
-      )
-    );
-    return values;
-  };
+  async multicallSupported() {
+    const network = await this.provider.getNetwork();
+    return await networkSupportsMulticall(network.chainId);
+  }
 
   async executeMulticallData(data: string) {
     const network = await this.provider.getNetwork();
@@ -79,8 +76,17 @@ export class MulticallExecutor {
     };
 
     const result = await this.provider.call(tx);
-    console.log({ result });
 
     return result;
+  }
+
+  async executeRegularCalls(calls: Call[]) {
+    const values = await Promise.all(
+      calls.map(
+        async (call) =>
+          await this.provider.call({ to: call.to, data: call.data })
+      )
+    );
+    return values;
   }
 }

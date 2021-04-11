@@ -1,7 +1,7 @@
 import { BigNumber } from "@ethersProject/bignumber";
 import { MulticallExecutor, AGGREGATE_SELECTOR } from "../MulticallExecutor";
-import { MULTICALL_ADDRESSES } from "../multicallAddresses";
 import { MulticallContract } from "../MulticallContract";
+import { MULTICALL_ADDRESSES } from "../multicallAddresses";
 import ERC20Abi from "../__mocks__/ERC20Abi";
 
 const ADDRESS = "0xb197f346ec436e1fa89ed8b4ce58696364ab232c";
@@ -65,7 +65,7 @@ describe("MulticallExecutor", () => {
   });
 
   describe("executeCalls()", () => {
-    xit("should use multicall when available", async () => {
+    it("should use multicall when available", async () => {
       let contract = new MulticallContract("ERC20", ERC20Abi, ADDRESS);
 
       // ethers.utils.defaultAbiCoder.encode(['uint256', 'bytes[]'], [1234, [ethers.BigNumber.from('1234'), ethers.BigNumber.from('4321')]])
@@ -101,7 +101,7 @@ describe("MulticallExecutor", () => {
   });
 
   describe("executeMulticallData()", () => {
-    xit("should execute against mainnet", async () => {
+    it("should execute against mainnet", async () => {
       chainId = 1;
 
       await executor.executeMulticallData("0x1234");
@@ -111,7 +111,7 @@ describe("MulticallExecutor", () => {
       });
     });
 
-    xit("should execute against kovan", async () => {
+    it("should execute against kovan", async () => {
       chainId = 42;
       await executor.executeMulticallData("0x1234");
       expect(provider.call).toHaveBeenCalledWith({
@@ -120,7 +120,7 @@ describe("MulticallExecutor", () => {
       });
     });
 
-    xit("should execute against rinkeby", async () => {
+    it("should execute against rinkeby", async () => {
       chainId = 4;
       await executor.executeMulticallData("0x1234");
       expect(provider.call).toHaveBeenCalledWith({
@@ -129,7 +129,7 @@ describe("MulticallExecutor", () => {
       });
     });
 
-    xit("should execute against goerli", async () => {
+    it("should execute against goerli", async () => {
       chainId = 5;
       await executor.executeMulticallData("0x1234");
       expect(provider.call).toHaveBeenCalledWith({
@@ -138,7 +138,7 @@ describe("MulticallExecutor", () => {
       });
     });
 
-    xit("should fail with an unknown network", async () => {
+    it("should fail with an unknown network", async () => {
       chainId = 888;
       expect(executor.executeMulticallData("0x1234")).rejects.toEqual(
         new Error("multicall is not available on the network 888")

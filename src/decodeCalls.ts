@@ -5,6 +5,5 @@ export function decodeCalls(returnData: string) {
     ["uint256", "bytes[]"],
     returnData
   );
-  return results;
-  // return [blockNumber, results]
+  return [blockNumber, results];
 }
