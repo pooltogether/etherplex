@@ -3,6 +3,7 @@ import { Call } from "./Call";
 import { Context } from "./MulticallContract";
 import { aggregateCalls } from "./aggregateCalls";
 import { decodeCalls } from "./decodeCalls";
+import { decodeFunctionResults } from "./decodeFunctionResults";
 import { encodeCalls } from "./encodeCalls";
 import {
   networkSupportsMulticall,
@@ -21,23 +22,9 @@ export class MulticallExecutor {
 
     const [blockNumber, returnValues] = await this.executeCalls(calls);
 
-    const decoded = this.decodeFunctionResults(result, calls, returnValues);
+    const decoded = decodeFunctionResults(result, calls, returnValues);
 
     return decoded;
-  }
-
-  decodeFunctionResults(result, calls, returnValues) {
-    for (let i = 0; i < returnValues.length; i++) {
-      let call = calls[i];
-      let decoded = call.caller.__interface.decodeFunctionResult(
-        call.fd,
-        returnValues[i]
-      );
-
-      result[call.caller.__name][call.fd.name] = decoded;
-      result[call.caller.__name][call.fd.format()] = decoded;
-    }
-    return result;
   }
 
   async executeCalls(calls: Call[]) {
