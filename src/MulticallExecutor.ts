@@ -27,7 +27,10 @@ export class MulticallExecutor {
     const network = await this.provider.getNetwork();
     let returnValues;
     if (await networkSupportsMulticall(network.chainId)) {
-      returnValues = await this.executeCallsWithMulticall(data);
+      console.log(data);
+      // returnValues = await this.executeCallsWithMulticall(data);
+      returnValues = await this.executeMulticallData(data);
+      console.log(returnValues);
       returnValues = decodeCalls(returnValues);
     } else {
       returnValues = await this.executeRegularCalls(calls);
@@ -50,9 +53,9 @@ export class MulticallExecutor {
     return result;
   }
 
-  executeCallsWithMulticall = async (data) => {
-    return await this.executeMulticallData(data);
-  };
+  // executeCallsWithMulticall = async (data) => {
+  //   return await this.executeMulticallData(data);
+  // };
 
   executeRegularCalls = async (calls: Call[]) => {
     const values = await Promise.all(
@@ -76,6 +79,7 @@ export class MulticallExecutor {
     };
 
     const result = await this.provider.call(tx);
+    console.log({ result });
 
     return result;
   }
