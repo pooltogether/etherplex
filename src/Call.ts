@@ -1,6 +1,6 @@
 import { BytesLike } from 'ethers'
-import { FunctionFragment } from 'ethers/lib/utils';
-import { MulticallContract } from './MulticallContract';
+import { FunctionFragment } from 'ethers/lib/utils'
+import { MulticallContract } from './MulticallContract'
 
 export class Call {
   constructor(

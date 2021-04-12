@@ -1,21 +1,19 @@
 import { ethers } from 'ethers'
-import { ParamType } from 'ethers/lib/utils';
+import { ParamType } from 'ethers/lib/utils'
 import { Call } from './Call'
 
 export function encodeCalls(calls: Array<Call>): string {
   return ethers.utils.defaultAbiCoder.encode(
     [
       ParamType.fromObject({
-        components: [{"name":"target","type":"address"},{"name":"callData","type":"bytes"}],
+        components: [
+          { name: 'target', type: 'address' },
+          { name: 'callData', type: 'bytes' }
+        ],
         name: 'data',
         type: 'tuple[]'
       })
     ],
-    [
-      calls.map(call => [
-        call.to,
-        call.data
-      ])
-    ]
-  );  
+    [calls.map((call) => [call.to, call.data])]
+  )
 }

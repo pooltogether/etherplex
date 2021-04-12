@@ -6,11 +6,9 @@ import { Call } from './Call'
 export class Context {
   public calls = new Array<Call>()
 
-  constructor (
-    public contract: MulticallContract
-  ) {}
+  constructor(public contract: MulticallContract) {}
 
-  call (to: string, fd: FunctionFragment, data: BytesLike) {
+  call(to: string, fd: FunctionFragment, data: BytesLike) {
     let resolveCb: Function
     let rejectCb: Function
 
@@ -19,14 +17,7 @@ export class Context {
       rejectCb = reject
     })
 
-    const call = new Call(
-      this.contract,
-      fd,
-      to,
-      data,
-      resolveCb,
-      rejectCb
-    )
+    const call = new Call(this.contract, fd, to, data, resolveCb, rejectCb)
 
     this.calls.push(call)
 
@@ -35,7 +26,7 @@ export class Context {
 
   flush() {
     let oldCalls = this.calls
-    this.calls = new Array<Call>();
+    this.calls = new Array<Call>()
     return oldCalls
   }
 }
@@ -44,16 +35,12 @@ export class MulticallContract {
   public __interface: Interface
   public __functionContext: Function
 
-  constructor (
-    public readonly __name: string,
-    abi: Array<any>,
-    private readonly __address: string
-  ) {
+  constructor(public readonly __name: string, abi: Array<any>, private readonly __address: string) {
     this.__interface = new ethers.utils.Interface(abi)
 
     this.__functionContext = class FunctionContext extends Context {}
 
-    Object.keys(this.__interface.functions).forEach(functionName => {
+    Object.keys(this.__interface.functions).forEach((functionName) => {
       let fd = this.__interface.functions[functionName]
 
       if (/function/i.test(fd.type)) {
@@ -63,7 +50,7 @@ export class MulticallContract {
     })
   }
 
-  addFunction (fd: FunctionFragment) {
+  addFunction(fd: FunctionFragment) {
     let that = this
     let callback = (...params) => {
       // create a new context and return it
