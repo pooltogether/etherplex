@@ -1,6 +1,5 @@
-import { ethers } from 'ethers'
-import { BytesLike } from 'ethers'
-import { FunctionFragment, Interface } from 'ethers/lib/utils'
+import { ethers, BytesLike } from 'ethers'
+import { FunctionFragment, Interface } from '@ethersproject/abi'
 import { Call } from './Call'
 
 export class Context {

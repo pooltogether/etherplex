@@ -1,6 +1,6 @@
 {
   "name": "@pooltogether/etherplex",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Multicall with Ethers.js",
   "main": "dist/index.js",
   "browser": "dist/index.js",
@@ -30,9 +30,11 @@
     "zen-observable-ts": "^0.8.20"
   },
   "peerDependencies": {
+    "@ethersproject/abi": "^5.1.0",
     "ethers": "^5.0.31"
   },
   "devDependencies": {
+    "@ethersproject/abi": "^5.1.0",
     "@types/jest": "^24.0.23",
     "bufferutil": "^4.0.3",
     "ethers": "^5.0.31",

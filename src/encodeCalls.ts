@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import { ParamType } from 'ethers/lib/utils'
+import { ParamType } from '@ethersproject/abi'
 import { Call } from './Call'
 
 export function encodeCalls(calls: Array<Call>): string {
