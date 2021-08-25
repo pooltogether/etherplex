@@ -1,6 +1,6 @@
 {
   "name": "@pooltogether/etherplex",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Multicall with Ethers.js",
   "main": "dist/index.js",
   "browser": "dist/index.js",
