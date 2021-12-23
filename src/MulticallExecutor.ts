@@ -1,4 +1,4 @@
-import { BaseProvider } from '@ethersproject/providers'
+import { Provider } from '@ethersproject/abstract-provider'
 import { Call } from './Call'
 import { Context } from './MulticallContract'
 import { aggregateCalls } from './aggregateCalls'
@@ -11,7 +11,7 @@ import { networkSupportsMulticall } from './multicallAddresses'
 const debug = require('debug')('etherplex:MulticallExecutor')
 
 export class MulticallExecutor {
-  constructor(private readonly provider: BaseProvider) {}
+  constructor(private readonly provider: Provider) {}
 
   async executeCallers(...contexts: Context[]) {
     const [result, calls] = aggregateCalls(...contexts)
