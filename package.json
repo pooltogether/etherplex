@@ -40,7 +40,7 @@
     "ethers": "^5.0.31",
     "jest": "^24.9.0",
     "jest-leak-detector": "^25.1.0",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^3.1.1",
     "promise.allsettled": "^1.0.2",
     "rollup": "^1.27.4",
     "rollup-plugin-typescript": "^1.0.1",
